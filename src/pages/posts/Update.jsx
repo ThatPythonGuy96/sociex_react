@@ -6,15 +6,14 @@ import { Form, Button } from 'react-bootstrap'
 import '../components/css/Post.css'
 
 const Update = () => {
-    const getGridClass = (count) => `grid-${Math.min(count, 4)}`;
     const navigate = useNavigate()
     const {id} = useParams()
     const {user} = useContext(AuthContext)
     const [post, setPost] = useState([])
-    const [caption, setCaption] = useState([])
-
-    const newPost = {caption: caption}
-
+    const [newCaption, setNewCaption] = useState("")
+    const [newImages, setNewImages] = useState([])
+    const [previews, setPreviews] = useState([]);
+    
     useEffect(() => {
         api.get(`api/post/feeds/post/${id}`)
         .then(res => {
@@ -24,17 +23,40 @@ const Update = () => {
             console.log(err.message)
         ])
     }, [])
+    
+    const removeImage = (index) => {
+		setNewImages(images.filter((_, i) => i !== index));
+		setPreviews(previews.filter((_, i) => i !== index));
+	};
 
-    function updatePost(){
-        console.log("Updating Post")
-        api.patch(`api/post/feeds/post/${id}/update`, newPost)
+    const handleImageChange = (e) => {
+		const files = Array.from(e.target.files);
+        setNewImages((prev) => [...prev, ...files]);
+		const imagePreviews = files.map((file) => URL.createObjectURL(file));
+		setPreviews((prev) => [...prev, ...imagePreviews]);
+	};
+
+    function updatePost(e){
+        e.preventDefault()
+        const formData = new FormData();
+        if (newCaption){
+            formData.append("caption", newCaption);  
+        }
+		
+        if (newImages){
+            newImages.forEach((image) => {
+			    formData.append("images", image);
+		    }); 
+        }
+		
+        api.patch(`api/post/feeds/post/${id}/update`, formData)
         .then(res => {
             console.log(res.data)
+            navigate(`/post/${id}`)
         })
         .catch(err => {
             console.log(err.message)
         })
-        navigate(`/post/${id}`)
     }
 
     return (
@@ -47,17 +69,31 @@ const Update = () => {
                             <Form onSubmit={updatePost}>
                                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                     <Form.Label>Caption</Form.Label>
-                                    <Form.Control type="text" placeholder={post.caption} autoFocus value={caption} onChange={(e) => setCaption(e.target.value)}/>
+                                    <Form.Control type="text" placeholder={post.caption} autoFocus value={newCaption} onChange={(e) => setNewCaption(e.target.value)}/>
                                 </Form.Group>
-                                <div className={`update-post-image ${getGridClass(post?.post_images?.length || 1)}`}>
-                                    {post && post.post_images && post.post_images.map((image, index) => (
-                                        <img className="update-image-item" key={index} src={`${api.defaults.baseURL}${image.image}`} alt={image.image} />
-                                    ))}
-                                </div>
+                                {previews.length > 0 &&
+                                    <div className="images-preview">
+                                        {previews.map((preview, index) => (
+                                            <div key={index}>
+                                                <img className="preview-image-item" src={preview} alt="Preview" width="100" height="100" />
+                                                <button type="button" onClick={() => removeImage(index)} className='preview-remove-button'>
+                                                ❌
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+                                {post.post_images?.length > 0 &&
+                                    <div className="update-post-image">
+                                        {post.post_images && post.post_images.map((image, index) => (
+                                            <img className="update-image-item" key={index} src={`${api.defaults.baseURL}${image.image}`} alt={image.image} />
+                                        ))}
+                                    </div>
+                                }
 
                                 <Form.Group controlId="exampleForm.ControlInput3" className="mb-3">
-                                    <Form.Label>Image</Form.Label>
-                                    <Form.Control type="file" multiple />
+                                    <Form.Label>Images</Form.Label>
+                                    <Form.Control type="file" multiple onChange={handleImageChange}/>
                                 </Form.Group>
 
                                 <Button className="btn bottons mx-2" type="submit" variant='success'>Save changes</Button>

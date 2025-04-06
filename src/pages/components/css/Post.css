@@ -63,16 +63,36 @@
 .update-post-image{
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    justify-content:flex-start;
     gap: 4px;
     margin: 5px 0px;
     padding: 3px;
     border: 1px solid #21307b;
-    width: fit-content;
 }
 .update-image-item{
-    height: 300px;
+    height: 160px;
 }
 .caption{
     color: #B4C5DB !important;
+}
+.images-preview {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 4px;
+    margin: 5px 0px;
+    padding: 3px;
+    border: 1px solid #21307b;
+    
+}
+.preview-image-item{
+    /* height: 50%; */
+    width: fit-content;
+}
+.preview-remove-button {
+    position: relative; 
+    bottom: 33px; 
+    /* right: 37px; */
 }

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import api from '../../api'
+import { useNavigate } from 'react-router-dom'
 import '../components/css/Profile.css'
 
 const UpdateProfile = () => {
-
+	const navigate = useNavigate()
 	const [user, setUser] = useState([])
 	const [email, setEmail] = useState('')
 	const [about, setAbout] = useState('')
@@ -15,8 +16,6 @@ const UpdateProfile = () => {
 		profilePic: null,
 		coverPic: null,
 	});
-
-	const updateData = {email: email, bio: about, profile_pic: profilePic, cover_pic: coverPic}
 
 	useEffect(() => {
 		api.get('api/user/')
@@ -45,10 +44,34 @@ const UpdateProfile = () => {
 
 	function updateProfile(e){
 		e.preventDefault()
-		console.log(updateData)
-		// api.put('api/user', updateData, {
-		// 	headers: { "Content-Type": "multipart/form-data" },
-		// })
+		
+		const formData = new FormData();
+
+		if (about){
+            formData.append("bio", about);  
+        }
+
+		if (email){
+            formData.append("email", email);  
+        }
+
+		if (profilePic){
+			formData.append("profile_pic", profilePic);
+        }
+
+		if (coverPic){
+			formData.append("cover_pic", coverPic);
+        }
+		
+		console.log(formData)
+		api.patch(`api/user/${user.username}/update`, formData)
+		.then(res => {
+            console.log(res.data)
+			navigate(`/profile/${user.username}`)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
 	}
 
 	return (

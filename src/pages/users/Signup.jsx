@@ -16,7 +16,6 @@ const Signup = () => {
     
     function signupUser(e){
         e.preventDefault()
-        console.log(userData)
         api.post('api/user/auth/signup', userData)
         .then(res => {
             navigate('/login')

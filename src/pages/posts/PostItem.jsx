@@ -29,9 +29,8 @@ const PostItem = ({ post, loading, error }) => {
         })
     } 
 
-    function deletePost(e){
-        e.preventDefault()
-        api.delete(`api/post/feeds/post/${post.id}/delete`)
+    function deletePost(){
+        api.post(`api/post/feeds/post/${post.id}/delete`)
         .then(res => {
             console.log(res.data)
             navigate('/')
@@ -41,7 +40,6 @@ const PostItem = ({ post, loading, error }) => {
         })
         
     }
-
 
     return (
         <>
@@ -59,7 +57,7 @@ const PostItem = ({ post, loading, error }) => {
                                         <span className="post-user">{post.user?.username}</span>
                                     </Link>
                                 </div>
-                                <p className="tx-11 m-0 icon-num">{post.updated_at}</p>
+                                <p className="tx-11 m-0 icon-num">{post.created}</p>
                             </div>
                         </div>
                         {post.user?.username === user.username ? 
