@@ -10,7 +10,9 @@ const Home = () => {
     return (
         <div className='home'>
             <Navbar />
-            <Outlet />
+            <div style={{minHeight: "87vh"}}>
+                <Outlet />
+            </div>
             <BackToTop />
             <Footer />
         </div>

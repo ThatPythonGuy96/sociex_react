@@ -8,7 +8,7 @@ const Loader = () => {
             <div className='feed shad rounded py-2'>
                 <div className="px-3 border-bottom">
                     <div>
-                        <Placeholder as="p" animation="wave">
+                        <Placeholder animation="wave">
                             <Placeholder xs={12} bg="light" style={{ width: '25%' }}/>
                         </Placeholder>
                         <Placeholder as="p" animation="wave">
@@ -20,13 +20,11 @@ const Loader = () => {
                     <span className='caption'>
                         <Placeholder as="p" animation="glow">
                             <Placeholder xs={12} bg="light" style={{ width: '85%' }} size="lg"/>
-                            <Placeholder xs={12} bg="light" style={{ width: '65%' }} size="lg"/>
-                            <Placeholder xs={12} bg="light" style={{ width: '45%' }} size="lg"/>
                         </Placeholder>
                     </span>
                     <div className="post-image">
                         <Placeholder as="p" animation="glow">
-                            <Placeholder xs={12} bg="light" style={{ width: "140vh", height: "35vh" }} />
+                            <Placeholder xs={12} bg="light" style={{ width: "100%", height: "100%" }} />
                         </Placeholder>
                     </div>
                 </div>

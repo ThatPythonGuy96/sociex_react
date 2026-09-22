@@ -166,7 +166,6 @@ const Chat = () => {
 								<li key={index} className="clearfix">
 									<div className={`message-data ${message.sender_user?.username === user.username ? 'text-right' : ''} `}>
 										<span className="message-data-time">{message.sent}</span>
-										{/* {message.sender_user.username === user.username ? <img src={`${api.defaults.baseURL}${message.sender_user.profile_pic}`} alt="avatar" /> : ''} */}
 									</div>
 									<div className={`${message.sender_user?.username === user.username ? 'other-message float-right' : 'my-message'}`}>
 										{message.body && <div className='message'>{message.body}</div> }

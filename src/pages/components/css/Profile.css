@@ -10,8 +10,7 @@
 .cover-img{
     width: 100%;
     height: 81%;
-    width: -webkit-fill-available;
-    object-fit: fill;
+    object-fit: cover;
     grid-area: 1 / 1 / 7 / 8;
 }
 .profile-pic{
@@ -59,7 +58,7 @@
     object-fit: cover;
 }
 .photos-item:hover{
-    transform: translateY(5px) scale(1.4);
+    transform: translateY(10px) scale(1.2);
     object-fit: contain;
 }
 .photo-prev{
@@ -103,3 +102,9 @@
     height: 251px;
     border-radius: 19% !important;
 }
+
+/* @media only screen and (min-width: 768px) and (max-width: 992px) {
+    .aside {
+        display: none
+    }
+} */

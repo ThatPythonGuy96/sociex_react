@@ -4,18 +4,20 @@ import AuthContext from '../../utils/AuthContext'
 import api from '../../api'
 import { Form, Button } from 'react-bootstrap'
 import '../components/css/Post.css'
+import Loading from '../components/ui/Loading'
 
 const Update = () => {
     const navigate = useNavigate()
     const {id} = useParams()
     const {user} = useContext(AuthContext)
     const [post, setPost] = useState([])
+    const [updating, setUpdating] = useState(false)
     const [newCaption, setNewCaption] = useState("")
     const [newImages, setNewImages] = useState([])
     const [previews, setPreviews] = useState([]);
     
     useEffect(() => {
-        api.get(`api/post/feeds/post/${id}`)
+        api.get(`api/post/${id}`)
         .then(res => {
             setPost(res.data)
         })
@@ -39,6 +41,9 @@ const Update = () => {
     function updatePost(e){
         e.preventDefault()
         const formData = new FormData();
+        
+        formData.append("id", {id})
+        
         if (newCaption){
             formData.append("caption", newCaption);  
         }
@@ -48,14 +53,16 @@ const Update = () => {
 			    formData.append("images", image);
 		    }); 
         }
-		
-        api.patch(`api/post/feeds/post/${id}/update`, formData)
+		setUpdating(true)
+        api.patch(`api/post/${id}/update/`, formData)
         .then(res => {
             console.log(res.data)
             navigate(`/post/${id}`)
+		    setUpdating(false)
         })
         .catch(err => {
             console.log(err.message)
+		    setUpdating(false)
         })
     }
 
@@ -98,6 +105,7 @@ const Update = () => {
 
                                 <Button className="btn bottons mx-2" type="submit" variant='success'>Save changes</Button>
                                 <Button variant='danger'>Cancel</Button>
+                                {updating && <Loading />}
                             </Form>
                         </div>
                     </div>

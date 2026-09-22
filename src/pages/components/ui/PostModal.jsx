@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
 import api from '../../../api'
 import { useNavigate } from 'react-router-dom'
+import Loading from '../ui/Loading'
 
 const PostModal = ({show, setShow}) => {
 	const navigate = useNavigate()
 	const handleClose = () => setShow(false);
 	const [caption, setCaption] = useState("")
 	const [images, setImages] = useState([])
+	const [posting, setPosting] = useState(false)
 	const [previews, setPreviews] = useState([]);
 	const MAX_IMAGES = 4;
 
@@ -30,14 +32,16 @@ const PostModal = ({show, setShow}) => {
 		images.forEach((image) => {
 			formData.append("images", image);
 		});
-
+		setPosting(true)
 		api.post('api/post/feeds/create/', formData)
 		.then(res => {
 			navigate(`/post/${res.data.id}`)
 			setShow(false)
+			setPosting(false)
 		})
 		.catch(err => {
 			console.log(err.message)
+			setPosting(false)
 		})
     }
 
@@ -75,6 +79,7 @@ const PostModal = ({show, setShow}) => {
 			<Modal.Footer>
 				<Button variant="secondary" onClick={handleClose}>Close</Button>
 				<Button variant="primary" onClick={submitPost}>Post</Button>
+				{posting && <Loading />}
 			</Modal.Footer>
 		</Modal>
     )

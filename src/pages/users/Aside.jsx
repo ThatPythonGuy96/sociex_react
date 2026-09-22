@@ -3,6 +3,7 @@ import { FaUserPlus } from 'react-icons/fa6'
 import api from '../../api'
 import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
+import '../components/css/Profile.css'
 
 const Aside = ({ follows, suggests }) => {
 	
@@ -18,7 +19,7 @@ const Aside = ({ follows, suggests }) => {
 	}
 
 	return (
-		<div>
+		<div className='aside'>
 			<div className="feed">
 				<div className="p-3 mb-1">
 					<div className="d-flex justify-content-center mb-2">

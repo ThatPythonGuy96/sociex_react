@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [Authenticated, setAuthenticated] = useState(false)
     const [user, setUser] = useState([])
 
-    function handleAuth(){
+    const handleAuth = async () => {
         const token = localStorage.getItem("access")
         if (token) {
             const decoded = jwtDecode(token)
@@ -19,26 +19,25 @@ export const AuthProvider = ({ children }) => {
             if (expiry_date > current_time){
                 setAuthenticated(true)
             } else {
-                refreshToken();
+                await refreshToken();
             }
         }
     }
 
-    function refreshToken(){
+    const refreshToken = async () => {
         const refreshToken = localStorage.getItem("refresh")
-        api.post('api/user/auth/token/refresh/', {refresh: refreshToken})
-        .then(res => {
+        try {
+            const res = await api.post('api/user/auth/token/refresh/', {refresh: refreshToken})
             if (res.status === 200) {
                 localStorage.setItem("access", res.data.access)
                 setAuthenticated(true)
             } else {
                 setAuthenticated(false)
             }
-        })
-        .catch(err => {
-            console.log(err.message)
+        } catch (error) {
+            console.log(error.message)
             setAuthenticated(false)
-        })
+        }
     }
 
     function get_user() {

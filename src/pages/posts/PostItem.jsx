@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Loader from '../components/Loader'
 import { Dropdown, Button } from 'react-bootstrap'
-import { FaComments, FaEye, FaHeart, FaRegHeart, FaEllipsisVertical } from 'react-icons/fa6'
+import { FaComments, FaEye, FaHeart, FaRegHeart, FaEllipsisVertical, FaShare, FaRegBookmark, FaBookmark } from 'react-icons/fa6'
 import api from '../../api'
 import '../components/css/Post.css'
 import { Link } from 'react-router-dom'
@@ -15,11 +15,24 @@ const PostItem = ({ post, loading, error }) => {
     const [comments, setComments] = useState(post.comment_num)
     const [views, setViews] = useState(post.views)
     const [liked, setLiked] = useState(post.is_liked || false)
+    const [reposted, setReposted] = useState(post.is_reposted || false)
     const postId = {post_id: post.id}
+
+    function repost(e){
+        e.preventDefault()
+        api.post(`api/post/repost/`, postId)
+        .then(res => {
+            console.log(res.data)
+            navigate(`/post/${res.data.id}`)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
+    }
 
     function likePost(e){
         e.preventDefault()
-        api.post('api/post/like', postId)
+        api.post('api/post/like/', postId)
         .then(res => {
             setLiked(res.data.isliked)
             setLikes(res.data.num_of_likes)
@@ -30,7 +43,7 @@ const PostItem = ({ post, loading, error }) => {
     } 
 
     function deletePost(){
-        api.post(`api/post/feeds/post/${post.id}/delete`)
+        api.post(`api/post/${post.id}/delete/`)
         .then(res => {
             console.log(res.data)
             navigate('/')
@@ -41,12 +54,24 @@ const PostItem = ({ post, loading, error }) => {
         
     }
 
+    function bookmarkPost(e){
+        e.preventDefault()
+        api.post('api/bookmark/create/', postId)
+        .then(res => {
+            console.log(res.data)
+            setReposted(res.data.is_reposted)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
+    }
+
     return (
         <>
             {loading && <Loader />}
             {loading || error !="" ||
                 <div className='feed shad rounded py-2'>
-                    <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom">
+                    <div className="d-flex flex-row justify-content-between py-2 align-items-center border-bottom ">
                         <div className="d-flex flex-row align-items-center feed-text px-2">
                             <Link to={`/profile/${post.user?.username}`}>
                                 <img className="rounded-circle post-user-img" src={`${post.user?.profile_pic}`} />
@@ -106,6 +131,15 @@ const PostItem = ({ post, loading, error }) => {
                                     <FaEye />
                                     <span className="icon-num black">{views}</span>
                                 </div>
+                                <button className="btn action" onClick={repost} >
+                                    <FaShare/>
+                                </button>
+                                <button className="btn action" onClick={bookmarkPost}>
+                                    {reposted ?
+                                        <FaBookmark /> :
+                                        <FaRegBookmark />
+                                    }
+                                </button>
                             </div>
                         </div>
                     }

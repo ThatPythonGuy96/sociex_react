@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import '../components/css/Post.css'
 import api from '../../api'
 import PostItem from './PostItem'
+import RePost from './RePost'
 import Group from './GroupFeed'
 import LoaderContainer from '../components/LoaderContainer'
+import Loading from '../components/ui/Loading'
 
 const Feeds = () => {
 
@@ -13,8 +15,9 @@ const Feeds = () => {
 
     useEffect(() => {
         setLoading(true)
-        api.get('api/post/feeds')
+        api.get('api/feeds')
         .then(res => {
+            console.log(res.data);
             setPosts(res.data)
             setLoading(false)
             setError("")
@@ -32,13 +35,15 @@ const Feeds = () => {
             {loading || error !="" || 
                 <>
                     <div>
-                        {posts && posts.map((post) => {
-                            return(
+                        {posts && posts.map((post) => 
+                            post.reposted_post ? (
+                                <RePost key={post.id} post={post} loading={loading} error={error} />
+                            ) : (
                                 <PostItem key={post.id} post={post} loading={loading} error={error} />
-                            )
-                        })}
+                            ) 
+                        )}
                     </div>
-                    <Group />
+                    {/*<Group />*/}
                 </>
             }
             

@@ -3,7 +3,6 @@ import { Navbar as NavBar, Button, Form, Row, Col, Nav, Container, Badge, Dropdo
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/sociama.png'
 import { FaCirclePlus, FaMessage, FaBell, FaUsers } from "react-icons/fa6";
-import { jwtDecode } from 'jwt-decode'
 import AuthContext from '../../utils/AuthContext';
 import api from '../../api'
 import PostModal from '../components/ui/PostModal'
@@ -39,7 +38,7 @@ const Navbar = () => {
                 </Form>
                 {Authenticated ? 
                     <Nav className="justify-content-end">
-                        <Dropdown align="end" className='me-2 px-1'>
+                        <Dropdown align="end" className='me-2 px-1' data-bs-theme="light">
                             <Dropdown.Toggle as="div" id="dropdown-custom">
                                 <img className="dropdown-toggle nav-user-image mt-1" src={`${api.defaults.baseURL}${user.profile_pic}`} />
                             </Dropdown.Toggle>
@@ -60,12 +59,11 @@ const Navbar = () => {
                             <Badge pill bg="info" className="badge rounded-pill badge-notification">9</Badge>
                         </Nav.Link>
                         
-                        
                         <PostModal show={show} setShow={setShow} />   
                     </Nav> :
                     <Nav className="justify-content-end">
-                        <Nav.Link className='me-2 px-1' href='/login'>Login</Nav.Link>
-                        <Nav.Link className='me-2 px-1'href='/signup'>SignUp</Nav.Link>
+                        <Nav.Link className='me-2 px-1' href='/#/login'>Login</Nav.Link>
+                        <Nav.Link className='me-2 px-1'href='/#/signup'>SignUp</Nav.Link>
                     </Nav>
                 }
                 <NavBar.Toggle aria-controls="responsive-navbar-nav" />

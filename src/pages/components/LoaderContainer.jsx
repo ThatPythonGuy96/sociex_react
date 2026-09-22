@@ -13,7 +13,7 @@ const LoaderContainer = () => {
                 <Loader />
             </div>
             <div className='post-group'>
-                <div className='feed shad rounded'>
+                <div className='shad rounded p-3'>
                     <div className="group-feed message mb-2">
                         <div className="d-flex flex-row justify-content-between">
                             <div className="d-flex flex-row feed-text">

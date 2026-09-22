@@ -29,7 +29,6 @@ const ProfileHead = ({ profile }) => {
             console.log(err.message)
         })
     }
-
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
         const imagePreviews = files.map((file) => URL.createObjectURL(file));
@@ -120,9 +119,15 @@ const ProfileHead = ({ profile }) => {
                         <div className="d-flex flex-row">
                             <Link className="btn btn-primary mx-1 text-white" to='/chat'>Send Message</Link>
                             
-                            <Button className={following ? "btn-danger" : "btn-primary"} onClick={followUser}> 
-                                {following ? "UnFollow" : "Follow"}
-                            </Button>
+                            {following ? 
+                                <Button className="btn-danger" onClick={followUser}> 
+                                    {following && "UnFollow"}
+                                </Button>
+                                :
+                                <Button className="btn-primary" onClick={followUser}> 
+                                    {!following && "Follow"}
+                                </Button>
+                            }
                         </div>
                     }
                 </div>
