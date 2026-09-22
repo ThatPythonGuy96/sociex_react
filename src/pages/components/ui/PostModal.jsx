@@ -33,7 +33,7 @@ const PostModal = ({show, setShow}) => {
 			formData.append("images", image);
 		});
 		setPosting(true)
-		api.post('api/post/feeds/create/', formData)
+		api.post('api/post/create/', formData)
 		.then(res => {
 			navigate(`/post/${res.data.id}`)
 			setShow(false)
